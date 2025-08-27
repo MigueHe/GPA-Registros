@@ -1,0 +1,26 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - npm ci
+        - npx amplify generate outputs --app-id $AWS_AMPLIFY_APP_ID --branch $AWS_BRANCH
+
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        - echo "VITE_AMPLIFY_REGION=$AWS_REGION" >> .env
+        - echo "VITE_APP_VERSION=$AWS_COMMIT_ID" >> .env
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - amplify/.temp/**/*
