@@ -1,18 +1,11 @@
 version: 1
-backend:
-  phases:
-    build:
-      commands:
-        - npm ci
-        - npx amplify generate outputs --app-id $AWS_AMPLIFY_APP_ID --branch $AWS_BRANCH
-
 frontend:
   phases:
     preBuild:
       commands:
-        - npm ci
-        - echo "VITE_AMPLIFY_REGION=$AWS_REGION" >> .env
-        - echo "VITE_APP_VERSION=$AWS_COMMIT_ID" >> .env
+        - nvm install 20.19.0
+        - nvm use 20.19.0
+        - npm install
     build:
       commands:
         - npm run build
@@ -23,4 +16,3 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
-      - amplify/.temp/**/*
